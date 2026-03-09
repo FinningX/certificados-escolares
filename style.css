@@ -1,0 +1,240 @@
+body{
+font-family: "Bookman Old Style", serif;
+background:#f5f5f5;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+p{
+text-align:justify;
+margin:12px 0;
+}
+
+.certificado{
+
+width:210mm;
+min-height:297mm;
+margin: 0 auto;
+
+background:white;
+
+padding:15mm;
+
+box-sizing:border-box;
+
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+
+font-size:11pt;
+
+text-align:justify;
+
+line-height:1.6;
+
+}
+
+.certificado p{
+text-indent:0;
+}
+
+.certificado{
+break-inside:avoid;
+page-break-inside:avoid;
+}
+
+.encabezado{
+text-align:center;
+margin-bottom:25px;
+}
+
+.logo{
+width:600px;
+height:auto;
+display:block;
+margin:auto;
+margin-top: 10px;
+margin-bottom:25px;
+}
+
+input{
+border:none;
+border-bottom:1px dotted black;
+font-family:"Bookman Old Style";
+font-size:16px;
+width:200px;
+}
+
+#dni, #dni_solicitante{
+    text-align: center;
+    width:130px;
+}
+#nacimiento{
+    text-align: center;
+    width:150px;
+}
+#edad{
+    text-align: center;
+    width:78px;
+}
+#grado{
+    text-align: center;
+    width:120px;
+}
+#nombre_solicitante{
+    text-align: left;
+    width:400px;
+}
+#solicitante{
+    text-align: center;
+    width:375px;
+}
+#localidad{
+    text-align: center;
+    width:372px;
+    -webkit-text-stroke: black 0.5px;
+}
+#contenedorPDF{
+margin:0;
+padding:0;
+}
+#contenedorPDF{
+display:block;
+}
+#contenedorPDF .certificado{
+page-break-after:always;
+}
+
+#contenedorPDF .certificado:last-child{
+page-break-after:auto;
+}
+
+button{
+
+margin-top:20px;
+padding:10px 20px;
+font-size:16px;
+cursor:pointer;
+
+}
+
+h2{
+    text-align:center;
+    font-size:14pt;
+    font-weight:bold;
+    font-style:italic;
+}
+
+#subtitulo{
+
+font-size:11pt;
+
+text-align:justify;
+
+text-align-last:justify;
+
+line-height:1.4;
+
+margin-top:10px;
+
+margin-bottom:20px;
+
+/*white-space:nowrap;*/
+
+}
+
+/*.linea1{
+display:block;
+text-align:center;
+font-size: 10.5pt;
+}
+
+.linea2{
+display:block;
+text-align:justify;
+font-size:10.5pt;
+}*/
+
+.campoSolicitante{
+
+border-bottom:1px dotted black;
+
+padding:2px 4px;
+
+/*display:inline-block;*/
+
+min-width:200px;
+
+max-width:100%;
+
+white-space:normal;
+
+word-break:break-word;
+
+}
+
+.largoSolicitante{
+
+min-width:auto;
+
+}
+
+.campoAlumno{
+    border-bottom:1px dotted black;
+
+    padding:2px 4px;
+
+    display:inline-block;
+
+    min-width:120px;
+}
+
+.largoAlumno{
+
+min-width:430px;
+
+}
+
+.notas{
+
+margin-top:40px;
+
+font-size:8pt;
+
+text-align:left;
+
+line-height:1.3;
+
+}
+
+
+
+
+@page{
+size:A4;
+margin:0;
+}
+
+@media print{
+.campoSolicitante{
+width:100%;
+}
+.no-pdf{
+display:none;
+}
+
+button{
+position:fixed;
+bottom:20px;
+right:20px;
+}
+
+body{
+background:white;
+}
+
+.certificado{
+box-shadow:none;
+margin:0;
+}
+
+}

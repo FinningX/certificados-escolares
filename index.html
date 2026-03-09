@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Certificado de Escolaridad</title>
+
+        <link rel="stylesheet" href="style.css">
+
+    </head>
+
+    <body>
+
+        <div class="certificado">
+
+        <div class="encabezado">
+            <img src="logo.png" class="logo">
+
+            <h2>CERTIFICADO DE ESCOLARIDAD</h2>
+
+        </div>
+
+        <p id="subtitulo">
+        La Escuela de Gestión Privada <strong>“Nuestra Señora de Fátima”</strong> Aprobado por<br>
+        <strong>Acuerdo/<s>Resolución</s> Nº143/67</strong> – Registro Nº D.P.E.G.P.: <strong>RG-IPS-5</strong> – C.U.E. <strong>Nº 780009300</strong>
+        </p>
+
+        <p id="certifica">
+        <strong>CERTIFICA</strong> que el alumno/a (1): <span contenteditable="true" class="campoAlumno largoAlumno"></span>
+        </p>
+
+        <p>
+        D.N.I Nº <input type="text" id="dni">
+
+        Fecha de Nacimiento <input type="text" id="nacimiento">
+
+        de <input type="text" id="edad"> años de
+        </p>
+
+        <p>
+        edad, es alumno/a regular de este Establecimiento,
+        concurriendo a <input type="text" id="grado">
+        grado de 
+        </p>
+
+        <p>
+            Nivel 
+            <s>INICIAL</s> – 
+            <strong>PRIMARIO</strong> – 
+            <s>SECUNDARIO</s> – 
+            <s>SUPERIOR</s>
+            .........................................................
+        </p>
+
+        <p>
+            Habiendo ingresado/ egresado en el período escolar el día <strong>27 de febrero  de 2026.-</strong>
+        </p>
+
+        <p>
+        Se extiende el presente a solicitud del (2)
+        <input type="text" id="solicitante">
+
+        
+        </p>
+
+        <p>
+            Dn./Dña <input type="text" id="nombre_solicitante">
+            D.N.I Nº <input type="text" id="dni_solicitante">
+        </p>
+
+        <p>
+        para ser presentado ante (3)
+        <span contenteditable="true" class="campoSolicitante largoSolicitante"></span>
+        </p>
+
+        <p>
+        Dado en (4)<input type="text" id="localidad">
+        PROVINCIA DE SANTA CRUZ,
+        </p>
+
+        <p>
+        a los <strong>dieciocho</strong> días del mes de <strong>marzo</strong> del año <strong>dos mil veintiséis</strong>.
+        </p>
+
+        <div class="notas">
+            (1) Apellidos y Nombres completos.<br>
+            (2) Indicar si es padre, madre o tutor.<br>
+            (3) Repartición donde se gestionará el beneficio.<br>
+            (4) Localidad asiento del Establecimiento.
+        </div>
+
+        </div>
+
+        <div id="contenedorPDF"></div>
+
+        <div class="controles no-pdf">
+
+            <input type="file" id="excelFile" accept=".xlsx,.xls">
+
+            <button onclick="procesarExcel()">Generar certificados</button>
+
+            <button onclick="descargarPDF()">Exportar PDF</button>
+
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+        <script src="script.js"></script>
+        
+    </body>
+</html>
