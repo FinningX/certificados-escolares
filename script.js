@@ -51,16 +51,18 @@ function generarPDFMultiple(){
 
 function convertirFechaExcel(fecha){
 
-        if(typeof fecha === "number"){
+    if(typeof fecha === "number"){
 
         const fechaJS = new Date((fecha - 25569) * 86400 * 1000);
 
-        return fechaJS.toLocaleDateString("es-AR");
+        const dia = String(fechaJS.getDate()).padStart(2,'0');
+        const mes = String(fechaJS.getMonth() + 1).padStart(2,'0');
+        const anio = fechaJS.getFullYear();
 
+        return `${dia}/${mes}/${anio}`;
     }
-
+    
     return fecha;
-
 }
 
 /*funcion que genera los certificados automaticamente*/ 
@@ -77,20 +79,22 @@ async function generarCertificados(alumnos){
         const copia = modelo.cloneNode(true);
 
         copia.querySelector(".campoAlumno").innerText = alumno.nombre;
+        /*aplica separador de miles al dni*/
+        copia.querySelector("#dni").value = alumno.dni.toLocaleString("es-AR");
 
-        copia.querySelector("#dni").value = alumno.dni;
-
+        /*Convierte la fecha a formato 00/00/0000*/
         copia.querySelector("#nacimiento").value = convertirFechaExcel(alumno.nacimiento);
 
         copia.querySelector("#edad").value = alumno.edad;
-
+        
         copia.querySelector("#grado").value = alumno.grado;
 
         copia.querySelector("#solicitante").value = alumno.solicitante;
 
         copia.querySelector("#nombre_solicitante").value = alumno.nombre_solicitante;
 
-        copia.querySelector("#dni_solicitante").value = alumno.dni_solicitante;
+        /*aplica separador de miles al dni*/
+        copia.querySelector("#dni_solicitante").value = alumno.dni_solicitante.toLocaleString("es-AR");
 
         copia.querySelector(".campoSolicitante").innerText = alumno.ante;
 
