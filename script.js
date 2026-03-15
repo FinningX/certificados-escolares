@@ -154,6 +154,6 @@ function aplicarGenero(certificado, genero){
 
     if(genero === "M"){
         dna.style.textDecoration = "line-through";
-    }
+    } 
 
 }
