@@ -10,7 +10,7 @@
 
     <body>
 
-        <div class="certificado">
+        <div class="certificado plantilla">
 
         <div class="encabezado">
             <img src="logo.png" class="logo">
@@ -24,10 +24,14 @@
         <strong>Acuerdo/<s>Resolución</s> Nº143/67</strong> – Registro Nº D.P.E.G.P.: <strong>RG-IPS-5</strong> – C.U.E. <strong>Nº 780009300</strong>
         </p>
 
-        <p id="certifica">
-        <strong>CERTIFICA</strong> que el alumno/a (1): <span contenteditable="true" class="campoAlumno largoAlumno"></span>
-        </p>
-
+        
+            <p id="certfica" class="lineaGuiones">
+                <strong>CERTIFICA</strong> que el alumno/a (1): 
+                
+                    <span contenteditable="true" class="textoCampo campoAlumno largoAlumno"></span>
+                <span class="rellenoGuiones"></span>
+            </p>
+        
         <p>
         D.N.I Nº <input type="text" id="dni">
 
@@ -52,7 +56,7 @@
         </p>
 
         <p>
-            Habiendo ingresado/ egresado en el período escolar el día <strong>27 de febrero  de 2026.-</strong>
+            Habiendo ingresado/ <s>egresado</s> en el período escolar el día <strong>27 de febrero  de 2026.-</strong>
         </p>
 
         <p>
@@ -63,17 +67,20 @@
         </p>
 
         <p>
-            Dn./Dña <input type="text" id="nombre_solicitante">
+            <span id="dn">Dn.</span>/<span id="dna">Dña</span>
+            <input type="text" id="nombre_solicitante">
             D.N.I Nº <input type="text" id="dni_solicitante">
         </p>
 
-        <p>
-        para ser presentado ante (3)
-        <span contenteditable="true" class="campoSolicitante largoSolicitante"></span>
+        <p class="lineaPresentacion lineaGuiones">
+            para ser presentado ante (3)
+            <span contenteditable="true" class="campoSolicitante largoSolicitante"></span>
+            <span class="rellenoGuiones"></span>
         </p>
 
-        <p>
+        <p class="lineaGuiones">
             <span contenteditable="true" class="campoSolicitante2 largoSolicitante2"></span>
+            <span class="rellenoGuiones"></span>
         </p>
 
         <p>

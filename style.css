@@ -11,6 +11,11 @@ text-align:justify;
 margin:12px 0;
 }
 
+.lineaPresentacion{
+text-align:left;
+white-space:nowrap;
+}
+
 .certificado{
 
 width:210mm;
@@ -44,7 +49,7 @@ page-break-inside:avoid;
 
 .encabezado{
 text-align:center;
-margin-bottom:25px;
+margin-bottom:45px;
 }
 
 .logo{
@@ -53,7 +58,7 @@ height:auto;
 display:block;
 margin:auto;
 margin-top: 10px;
-margin-bottom:25px;
+margin-bottom:50px;
 }
 
 input{
@@ -67,32 +72,41 @@ width:200px;
 #dni, #dni_solicitante{
     text-align: center;
     width:130px;
+    -webkit-text-stroke: black 0.5px;
 }
 #nacimiento{
     text-align: center;
     width:150px;
+    -webkit-text-stroke: black 0.5px;
 }
 #edad{
     text-align: center;
     width:78px;
+    -webkit-text-stroke: black 0.5px;
 }
 #grado{
     text-align: center;
     width:120px;
+    -webkit-text-stroke: black 0.5px;
 }
 #nombre_solicitante{
-    text-align: left;
+    text-align: center;
     width:400px;
+    -webkit-text-stroke: black 0.5px;
+    text-transform:uppercase;
 }
 #solicitante{
     text-align: center;
     width:375px;
+    -webkit-text-stroke: black 0.5px;
 }
 #localidad{
     text-align: center;
     width:372px;
     -webkit-text-stroke: black 0.5px;
+    text-transform:uppercase;
 }
+
 #contenedorPDF{
 margin:0;
 padding:0;
@@ -132,9 +146,9 @@ text-align:justify;
 
 text-align-last:justify;
 
-line-height:1.4;
+line-height:1.6;
 
-margin-top:10px;
+margin-top:12px;
 
 margin-bottom:20px;
 
@@ -164,10 +178,13 @@ border-bottom:1px dotted black;
 
     min-width:120px;
 
+    -webkit-text-stroke: black 0.5px;
+
+    text-transform:uppercase;
+    
 }
 
 .largoSolicitante{
-
 min-width:460px;
 
 }
@@ -181,6 +198,10 @@ border-bottom:1px dotted black;
     display:inline-block;
 
     min-width:120px;
+
+    -webkit-text-stroke: black 0.5px;
+
+    text-transform:uppercase;
 
 }
 
@@ -198,6 +219,10 @@ min-width:667px;
     display:inline-block;
 
     min-width:120px;
+    
+    -webkit-text-stroke: black 0.5px;
+
+    text-transform:uppercase;
 }
 
 .largoAlumno{
@@ -218,7 +243,34 @@ line-height:1.3;
 
 }
 
+/*--------------------------------*/
+.lineaGuiones{
+display:flex;
+align-items:baseline;
+gap:6px;
+}
 
+.campoAlumno{
+min-width:50px;
+}
+.campoSolicitante{
+    min-width:50px;
+}
+.campoSolicitante2{
+    min-width:50px;
+}
+
+.rellenoGuiones{
+flex:1;
+overflow:hidden;
+white-space:nowrap;
+}
+
+.rellenoGuiones::after{
+content:"------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+letter-spacing:2px;
+}
+/*--------------------------------*/
 
 
 @page{
@@ -227,9 +279,7 @@ margin:0;
 }
 
 @media print{
-.campoSolicitante{
-width:100%;
-}
+
 .no-pdf{
 display:none;
 }

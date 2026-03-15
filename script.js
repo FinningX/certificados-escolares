@@ -77,6 +77,7 @@ async function generarCertificados(alumnos){
     for(let alumno of alumnos){
 
         const copia = modelo.cloneNode(true);
+        aplicarGenero(copia, alumno.genero);
 
         copia.querySelector(".campoAlumno").innerText = alumno.nombre;
         /*aplica separador de miles al dni*/
@@ -100,8 +101,7 @@ async function generarCertificados(alumnos){
 
         copia.querySelector(".campoSolicitante2").innerText = alumno.ante2;
 
-        copia.querySelector("#localidad").value = alumno.localidad;
-
+        copia.querySelector("#localidad").value = alumno.localidad?.trim();
         copia.style.pageBreakAfter = "auto";
 
         contenedor.appendChild(copia);
@@ -132,5 +132,28 @@ function generarPDF(nombreAlumno){
     };
 
     return html2pdf().set(opciones).from(elemento).save();
+
+}
+
+/*Funcion para detectar el genero y tachar Dn o Dña*/
+function aplicarGenero(certificado, genero){
+
+    const dn = certificado.querySelector("#dn");
+    const dna = certificado.querySelector("#dna");
+
+    dn.style.textDecoration = "none";
+    dna.style.textDecoration = "none";
+
+    if(!genero) return;
+
+    genero = genero.toString().trim().toUpperCase();
+
+    if(genero === "F"){
+        dn.style.textDecoration = "line-through";
+    }
+
+    if(genero === "M"){
+        dna.style.textDecoration = "line-through";
+    }
 
 }
