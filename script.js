@@ -101,6 +101,14 @@ async function generarCertificados(alumnos){
 
         copia.querySelector(".campoSolicitante2").innerText = alumno.ante2;
 
+        const linea2 = copia.querySelector(".campoSolicitante2").closest("p");
+
+        if(!alumno.ante2 || alumno.ante2.trim() === ""){
+            linea2.style.display = "none";
+        }else{
+            linea2.style.display = "flex";
+        }
+
         copia.querySelector("#localidad").value = alumno.localidad?.trim();
         copia.style.pageBreakAfter = "auto";
 
