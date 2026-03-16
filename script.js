@@ -1,9 +1,14 @@
+let contadorExcel = 0;
+let contadorManual = 0;
+
 function descargarPDF(){
 window.print();
 }
 
 /*codigo para leer el Excel*/ 
 function procesarExcel(){
+        contadorExcel = 0;
+        contadorManual = 0;
 
         const file = document.getElementById("excelFile").files[0];
 
@@ -17,7 +22,15 @@ function procesarExcel(){
 
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-        const alumnos = XLSX.utils.sheet_to_json(sheet);
+        let alumnos = XLSX.utils.sheet_to_json(sheet);
+
+// eliminar filas vacías
+alumnos = alumnos.filter(a => a.nombre && a.nombre.toString().trim() !== "");
+
+        if(alumnos.length === 0){
+            mostrarMensaje("⚠ El archivo Excel no contiene registros", "error");
+            return;
+        }
 
         /*para los alertas*/
         const columnasRequeridas = [
@@ -45,13 +58,12 @@ function procesarExcel(){
 
         }
         /*--------------------------------__*/
-
         generarCertificados(alumnos);
 
     };
 
     reader.readAsArrayBuffer(file);
-
+    
 }
 
 function generarPDFMultiple(){
@@ -108,7 +120,7 @@ async function generarCertificados(alumnos){
 
         copia.querySelector(".campoAlumno").innerText = alumno.nombre;
         /*aplica separador de miles al dni*/
-        copia.querySelector("#dni").value = alumno.dni.toLocaleString("es-AR");
+        copia.querySelector("#dni").value = Number(alumno.dni).toLocaleString("es-AR");
 
         /*Convierte la fecha a formato 00/00/0000*/
         copia.querySelector("#nacimiento").value = convertirFechaExcel(alumno.nacimiento);
@@ -122,7 +134,7 @@ async function generarCertificados(alumnos){
         copia.querySelector("#nombre_solicitante").value = alumno.nombre_solicitante;
 
         /*aplica separador de miles al dni*/
-        copia.querySelector("#dni_solicitante").value = alumno.dni_solicitante.toLocaleString("es-AR");
+        copia.querySelector("#dni_solicitante").value = Number(alumno.dni_solicitante).toLocaleString("es-AR");
 
         copia.querySelector(".campoSolicitante").innerText = alumno.ante;
 
@@ -140,11 +152,14 @@ async function generarCertificados(alumnos){
         copia.style.pageBreakAfter = "auto";
 
         contenedor.appendChild(copia);
-
     }
+    contadorExcel += alumnos.length;
 
+    mostrarMensaje(
+        `✔ ${contadorExcel} certificados generados desde Excel
+        ✏ ${contadorManual} certificados agregados manualmente`
+    );
     /*generarPDFMultiple();*/
-
 }
 
 /*Funcion que genera el pdf*/
@@ -202,6 +217,10 @@ const plantilla = document.querySelector(".plantilla");
 
 const copia = plantilla.cloneNode(true);
 
+const generoManual = document.getElementById("genero_manual").value;
+
+aplicarGenero(copia, generoManual);
+
 copia.classList.remove("plantilla");
 
 /* detectar si el segundo renglon esta vacio */
@@ -233,5 +252,34 @@ contenedor.appendChild(copia);
 plantilla.querySelectorAll("input").forEach(el=> el.value="");
 
 plantilla.querySelectorAll("[contenteditable]").forEach(el=> el.innerText="");
+
+contadorManual++;
+
+mostrarMensaje(
+`✔ ${contadorExcel} certificados generados desde Excel
+✏ ${contadorManual} certificados agregados manualmente`
+);
+
+document.getElementById("genero_manual").value = "";
+}
+
+/*funcion para mostrar mensajes de estado*/
+function mostrarMensaje(texto, tipo="ok"){
+
+    const mensaje = document.getElementById("mensajeEstado");
+
+    if(!mensaje) return;
+
+    mensaje.innerHTML = texto.replace(/\n/g,"<br>");
+
+    mensaje.className = "";
+
+    mensaje.classList.add(tipo === "ok" ? "mensaje-ok" : "mensaje-error");
+
+    mensaje.style.display = "block";
+
+    /*setTimeout(()=>{
+        mensaje.style.display="none";
+    },5000);*/
 
 }

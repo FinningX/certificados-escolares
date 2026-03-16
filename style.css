@@ -160,7 +160,7 @@ align-items:center;
 justify-content:center;
 
 flex-wrap:wrap;
-
+vertical-align:middle;
 }
 
 .btn{
@@ -184,7 +184,7 @@ transition:all 0.2s ease;
 height:38px;
 display:flex;
 align-items:center;
-
+vertical-align:middle;
 }
 
 .btn:hover{
@@ -198,20 +198,14 @@ box-shadow:0 3px 6px rgba(0,0,0,0.2);
 }
 
 .btn-secundario{
-
 background:#2e7d32;
-
 }
-
 .btn-secundario:hover{
-
 background:#1f5c24;
-
 }
 
 .btn-terciario{
 background:#f57c00;
-
 }
 .btn-terciario:hover{
 background:#bb4d00;
@@ -226,6 +220,43 @@ background:#fafafa;
 height:38px;
 box-sizing:border-box;
 vertical-align:middle;
+margin-bottom: -19px;
+}
+/*-------------------------*/
+
+/*estilos para los mensajes*/
+#mensajeEstado{
+
+margin-top:15px;
+
+padding:12px 18px;
+
+border-radius:6px;
+
+font-size:14px;
+
+display:none;
+
+}
+
+.mensaje-ok{
+
+background:#e8f5e9;
+
+color:#2e7d32;
+
+border:1px solid #a5d6a7;
+
+}
+
+.mensaje-error{
+
+background:#ffebee;
+
+color:#c62828;
+
+border:1px solid #ef9a9a;
+
 }
 /*-------------------------*/
 h2{
