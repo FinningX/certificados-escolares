@@ -1,3 +1,3 @@
 git add .
-git commit -m "corregido el muestreo del mensaje al exportar el PDF"
+git commit -m "añadido mejoras visuales al muestreo de los mensajes"
 git push

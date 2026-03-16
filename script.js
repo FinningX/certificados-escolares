@@ -10,7 +10,13 @@ function procesarExcel(){
         contadorExcel = 0;
         contadorManual = 0;
 
-        const file = document.getElementById("excelFile").files[0];
+        const fileInput = document.getElementById("excelFile");
+        const file = fileInput.files[0];
+
+        if(!file){
+            mostrarMensaje("⚠ Debe seleccionar un archivo Excel antes de generar los certificados.", "error");
+            return;
+        }
 
         const reader = new FileReader();
 
@@ -25,7 +31,7 @@ function procesarExcel(){
         let alumnos = XLSX.utils.sheet_to_json(sheet);
 
 // eliminar filas vacías
-alumnos = alumnos.filter(a => a.nombre && a.nombre.toString().trim() !== "");
+        alumnos = alumnos.filter(a => a.nombre && a.nombre.toString().trim() !== "");
 
         if(alumnos.length === 0){
             mostrarMensaje("⚠ El archivo Excel no contiene registros", "error");
@@ -113,7 +119,12 @@ async function generarCertificados(alumnos){
 
     const modelo = document.querySelector(".certificado");
 
+    let i = 0;
+
     for(let alumno of alumnos){
+
+        i++;
+        mostrarMensaje(`Generando certificados... 0/${alumnos.length}`);
 
         const copia = modelo.cloneNode(true);
         aplicarGenero(copia, alumno.genero);
@@ -152,6 +163,7 @@ async function generarCertificados(alumnos){
         copia.style.pageBreakAfter = "auto";
 
         contenedor.appendChild(copia);
+        await new Promise(r => setTimeout(r,10)); 
     }
     contadorExcel += alumnos.length;
 
@@ -278,8 +290,8 @@ function mostrarMensaje(texto, tipo="ok"){
 
     mensaje.style.display = "block";
 
-    /*setTimeout(()=>{
+    setTimeout(()=>{
         mensaje.style.display="none";
-    },5000);*/
+    },5000);
 
 }

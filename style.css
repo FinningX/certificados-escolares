@@ -227,7 +227,17 @@ margin-bottom: -19px;
 /*estilos para los mensajes*/
 #mensajeEstado{
 
-margin-top:15px;
+position:fixed;
+
+top:20px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+z-index:9999;
+
+margin-top:0;
 
 padding:12px 18px;
 
@@ -236,6 +246,8 @@ border-radius:6px;
 font-size:14px;
 
 display:none;
+
+box-shadow:0 4px 12px rgba(0,0,0,0.25);
 
 print-color-adjust:exact;
 
@@ -407,6 +419,22 @@ vertical-align:middle;
 }
 /*--------------------------------*/
 
+/*animacion para los mensajes*/
+#mensajeEstado{
+animation: aparecerMensaje 0.3s ease;
+}
+
+@keyframes aparecerMensaje{
+from{
+opacity:0;
+transform:translate(-50%,-10px);
+}
+to{
+opacity:1;
+transform:translate(-50%,0);
+}
+}
+/*-----------------*/
 
 @page{
 size:A4;
