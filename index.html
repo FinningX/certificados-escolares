@@ -107,10 +107,11 @@
 
             <input type="file" id="excelFile" accept=".xlsx,.xls">
 
-            <button onclick="procesarExcel()">Generar certificados</button>
+            <button class="btn" onclick="procesarExcel()">Generar certificados</button>
 
-            <button onclick="descargarPDF()">Exportar PDF</button>
+            <button class="btn btn-secundario"onclick="descargarPDF()">Exportar PDF</button>
 
+            <button class="btn btn-terciario" onclick="agregarCertificadoManual()">➕ Agregar certificado manual</button>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>

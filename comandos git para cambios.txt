@@ -1,3 +1,3 @@
 git add .
-git commit -m "mejoras generales en el alineado de los inputs y span + eliminado automaticamente del segundo renglon de la repartcición si está vacío"
+git commit -m "mejoras visuales en los botones"
 git push

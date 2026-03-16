@@ -61,7 +61,7 @@ margin-top: 10px;
 margin-bottom:50px;
 }
 
-input{
+input[type="text"]{
 border:none;
 border-bottom:1px dotted black;
 font-family:"Bookman Old Style";
@@ -107,6 +107,7 @@ box-sizing:border-box;
     text-align: center;
     width:380px;
     -webkit-text-stroke: black 0.5px;
+    text-transform:uppercase;
 }
 #localidad{
     text-align: center;
@@ -130,15 +131,103 @@ page-break-after:always;
 page-break-after:auto;
 }
 
+/*estilos para los botones*/
 button{
-
 margin-top:20px;
 padding:10px 20px;
 font-size:16px;
 cursor:pointer;
+}
+
+.controles{
+
+margin-top:30px;
+
+background:white;
+
+padding:20px;
+
+border-radius:10px;
+
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+
+display:flex;
+
+gap:15px;
+
+align-items:center;
+
+justify-content:center;
+
+flex-wrap:wrap;
 
 }
 
+.btn{
+
+background:#1976d2;
+
+color:white;
+
+border:none;
+
+padding:10px 18px;
+
+font-size:15px;
+
+border-radius:6px;
+
+cursor:pointer;
+
+transition:all 0.2s ease;
+
+height:38px;
+display:flex;
+align-items:center;
+
+}
+
+.btn:hover{
+
+background:#125aa0;
+
+transform:translateY(-1px);
+
+box-shadow:0 3px 6px rgba(0,0,0,0.2);
+
+}
+
+.btn-secundario{
+
+background:#2e7d32;
+
+}
+
+.btn-secundario:hover{
+
+background:#1f5c24;
+
+}
+
+.btn-terciario{
+background:#f57c00;
+
+}
+.btn-terciario:hover{
+background:#bb4d00;
+}
+
+#excelFile{
+font-size:14px;
+padding:8px 10px;
+border-radius:6px;
+border:1px solid #ccc;
+background:#fafafa;
+height:38px;
+box-sizing:border-box;
+vertical-align:middle;
+}
+/*-------------------------*/
 h2{
     text-align:center;
     font-size:14pt;

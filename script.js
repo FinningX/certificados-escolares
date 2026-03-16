@@ -19,6 +19,33 @@ function procesarExcel(){
 
         const alumnos = XLSX.utils.sheet_to_json(sheet);
 
+        /*para los alertas*/
+        const columnasRequeridas = [
+            "nombre",
+            "dni",
+            "nacimiento",
+            "edad",
+            "grado",
+            "solicitante",
+            "nombre_solicitante",
+            "dni_solicitante",
+            "ante",
+            "localidad",
+            "genero"
+        ];
+        const columnasExcel = Object.keys(alumnos[0] || {});
+
+        const columnasFaltantes = columnasRequeridas.filter(col => !columnasExcel.includes(col));
+
+        if(columnasFaltantes.length > 0){
+
+            alert("El archivo Excel tiene columnas faltantes:\n\n" + columnasFaltantes.join("\n"));
+
+            return;
+
+        }
+        /*--------------------------------__*/
+
         generarCertificados(alumnos);
 
     };
@@ -99,7 +126,7 @@ async function generarCertificados(alumnos){
 
         copia.querySelector(".campoSolicitante").innerText = alumno.ante;
 
-        copia.querySelector(".campoSolicitante2").innerText = alumno.ante2;
+        copia.querySelector(".campoSolicitante2").innerText = alumno.ante2 || "";
 
         const linea2 = copia.querySelector(".campoSolicitante2").closest("p");
 
@@ -163,5 +190,48 @@ function aplicarGenero(certificado, genero){
     if(genero === "M"){
         dna.style.textDecoration = "line-through";
     } 
+
+}
+
+/*funcion para agregar certificado manualmente si falto alguno*/
+function agregarCertificadoManual(){
+
+const contenedor = document.getElementById("contenedorPDF");
+
+const plantilla = document.querySelector(".plantilla");
+
+const copia = plantilla.cloneNode(true);
+
+copia.classList.remove("plantilla");
+
+/* detectar si el segundo renglon esta vacio */
+
+const ante2 = copia.querySelector(".campoSolicitante2").innerText.replace(/\s+/g,'').trim();
+
+const linea2 = copia.querySelector(".campoSolicitante2").closest("p");
+
+if(!ante2){
+    linea2.style.display = "none";
+}else{
+    linea2.style.display = "flex";
+}
+
+/* bloquear edicion */
+
+copia.querySelectorAll("[contenteditable]").forEach(el=>{
+    el.contentEditable = "false";
+});
+
+copia.querySelectorAll("input").forEach(el=>{
+    el.readOnly = true;
+});
+
+contenedor.appendChild(copia);
+
+/* limpiar plantilla */
+
+plantilla.querySelectorAll("input").forEach(el=> el.value="");
+
+plantilla.querySelectorAll("[contenteditable]").forEach(el=> el.innerText="");
 
 }
