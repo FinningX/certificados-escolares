@@ -237,6 +237,8 @@ font-size:14px;
 
 display:none;
 
+print-color-adjust:exact;
+
 }
 
 .mensaje-ok{
@@ -430,6 +432,10 @@ background:white;
 .certificado{
 box-shadow:none;
 margin:0;
+}
+
+#mensajeEstado{
+display:none !important;
 }
 
 }

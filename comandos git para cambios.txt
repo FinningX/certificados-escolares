@@ -1,3 +1,3 @@
 git add .
-git commit -m "añadido alertas y mensajes de validación o error + mejoras generales"
+git commit -m "corregido el muestreo del mensaje al exportar el PDF"
 git push
