@@ -79,7 +79,7 @@ box-sizing:border-box;
 
 #dni, #dni_solicitante{
     text-align: center;
-    width:130px;
+    width:140px;
     -webkit-text-stroke: black 0.5px;
 }
 #nacimiento{
@@ -89,12 +89,12 @@ box-sizing:border-box;
 }
 #edad{
     text-align: center;
-    width:78px;
+    width:80px;
     -webkit-text-stroke: black 0.5px;
 }
 #grado{
     text-align: center;
-    width:120px;
+    width:125px;
     -webkit-text-stroke: black 0.5px;
 }
 #nombre_solicitante{
@@ -105,12 +105,12 @@ box-sizing:border-box;
 }
 #solicitante{
     text-align: center;
-    width:375px;
+    width:380px;
     -webkit-text-stroke: black 0.5px;
 }
 #localidad{
     text-align: center;
-    width:372px;
+    width:377px;
     -webkit-text-stroke: black 0.5px;
     text-transform:uppercase;
 }
@@ -275,7 +275,7 @@ white-space:nowrap;
 }
 
 .rellenoGuiones::after{
-content:"------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+content:"----------------------------------------------------";
 letter-spacing:2px;
 }
 
