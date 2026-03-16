@@ -1,3 +1,3 @@
 git add .
-git commit -m "añadido mejoras visuales al muestreo de los mensajes"
+git commit -m "añadido en la funcion generarCertificados mejora para concatenar el apellido y nombre para mostrarlo en ese orden"
 git push

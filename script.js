@@ -40,6 +40,7 @@ function procesarExcel(){
 
         /*para los alertas*/
         const columnasRequeridas = [
+            "apellido",
             "nombre",
             "dni",
             "nacimiento",
@@ -128,8 +129,13 @@ async function generarCertificados(alumnos){
 
         const copia = modelo.cloneNode(true);
         aplicarGenero(copia, alumno.genero);
+        /*----------------------*/
+        const nombreCompletoAlumno = 
+        `${alumno.apellido || ""} ${alumno.nombre || ""}`.trim();
 
-        copia.querySelector(".campoAlumno").innerText = alumno.nombre;
+        copia.querySelector(".campoAlumno").innerText = nombreCompletoAlumno;
+        /*----------------------*/
+        
         /*aplica separador de miles al dni*/
         copia.querySelector("#dni").value = Number(alumno.dni).toLocaleString("es-AR");
 
