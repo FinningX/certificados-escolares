@@ -153,17 +153,37 @@ async function generarCertificados(alumnos){
         /*aplica separador de miles al dni*/
         copia.querySelector("#dni_solicitante").value = Number(alumno.dni_solicitante).toLocaleString("es-AR");
 
-        copia.querySelector(".campoSolicitante").innerText = alumno.ante;
+        /*--------------------------------------------------------------------------------------------------------*/
 
-        copia.querySelector(".campoSolicitante2").innerText = alumno.ante2 || "";
+        let textoAnte = (alumno.ante || "").trim();
 
-        const linea2 = copia.querySelector(".campoSolicitante2").closest("p");
+        let textoLinea1 = textoAnte;
+        let textoLinea2 = "";
 
-        if(!alumno.ante2 || alumno.ante2.trim() === ""){
-            linea2.style.display = "none";
-        }else{
-            linea2.style.display = "flex";
+        const limite = 50;
+
+        if(textoAnte.length > limite){
+
+            let corte = textoAnte.lastIndexOf(" ", limite);
+
+            if(corte === -1) corte = limite;
+
+            textoLinea1 = textoAnte.substring(0, corte).trim();
+            textoLinea2 = textoAnte.substring(corte).trim();
         }
+
+        copia.querySelector(".campoSolicitante").innerText = textoLinea1;
+        copia.querySelector(".campoSolicitante2").innerText = textoLinea2;
+
+        const linea2p = copia.querySelector(".campoSolicitante2").closest("p");
+
+        if(!textoLinea2){
+            linea2p.style.display = "none";
+        }else{
+            linea2p.style.display = "flex";
+        }
+
+        /*--------------------------------------------------------------------------------------------------------*/
 
         copia.querySelector("#localidad").value = alumno.localidad?.trim();
         copia.style.pageBreakAfter = "auto";
@@ -178,6 +198,35 @@ async function generarCertificados(alumnos){
         ✏ ${contadorManual} certificados agregados manualmente`
     );
     /*generarPDFMultiple();*/
+}
+
+function dividirTextoEnLineas(texto, campo1, campo2){
+
+    const palabras = texto.split(" ");
+
+    let linea1 = "";
+    let linea2 = "";
+
+    campo1.innerText = "";
+    campo2.innerText = "";
+
+    for(let palabra of palabras){
+
+        let prueba = (linea1 + " " + palabra).trim();
+
+        campo1.innerText = prueba;
+
+        if(campo1.scrollWidth > campo1.clientWidth){
+            linea2 += palabra + " ";
+        }else{
+            linea1 = prueba;
+        }
+
+    }
+
+    campo1.innerText = linea1.trim();
+    campo2.innerText = linea2.trim();
+
 }
 
 /*Funcion que genera el pdf*/
