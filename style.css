@@ -47,6 +47,10 @@ break-inside:avoid;
 page-break-inside:avoid;
 }
 
+.certificado:last-child{
+page-break-after: auto !important;
+}
+
 .encabezado{
 text-align:center;
 margin-bottom:45px;
@@ -221,6 +225,52 @@ height:38px;
 box-sizing:border-box;
 vertical-align:middle;
 margin-bottom: -19px;
+}
+
+.btnEliminar{
+    margin-top:10px;
+    padding:6px 10px;
+    font-size:12px;
+    border:none;
+    background:#d9534f;
+    color:white;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+.btnEliminar:hover{
+    background:#c9302c;
+}
+
+.btnMaterial{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 6px;
+    border: none;
+    background-color: #1976d2;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+    margin-bottom: -19px;
+}
+
+/* hover */
+.btnMaterial:hover{
+    background-color: #1565c0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* click */
+.btnMaterial:active{
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    transform: scale(0.98);
 }
 /*-------------------------*/
 
@@ -446,27 +496,35 @@ margin:0;
 
 @media print{
 
-.no-pdf{
-display:none;
-}
+    .no-pdf{
+    display:none;
+    }
 
-button{
-position:fixed;
-bottom:20px;
-right:20px;
-}
+    button{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    }
 
-body{
-background:white;
-}
+    body{
+    background:white;
+    }
 
-.certificado{
-box-shadow:none;
-margin:0;
-}
+    .certificado{
+    box-shadow:none;
+    margin:0;
+    }
 
-#mensajeEstado{
-display:none !important;
-}
+    #mensajeEstado{
+    display:none !important;
+    }
+
+    .plantilla{
+    display:none !important;
+    }
+
+    .controles{
+    display:none !important;
+    }
 
 }

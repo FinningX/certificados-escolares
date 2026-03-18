@@ -33,8 +33,8 @@
             </p>
         
         <p>
-        D.N.I Nº <input type="text" id="dni">
-        Fecha de Nacimiento <input type="text" id="nacimiento">
+        D.N.I Nº <input type="text" id="dni" onkeypress="soloNumeros(event)" oninput="formatearDNI(this)">
+        Fecha de Nacimiento <input type="text" id="nacimiento" oninput="formatearFechaInput(this)" onblur="validarFechaFinal(this)">
 
         de <input type="text" id="edad"> años de
         </p>
@@ -68,7 +68,7 @@
         <p>
             <span id="dn">Dn.</span>/<span id="dna">Dña</span>
             <input type="text" id="nombre_solicitante">
-            D.N.I Nº <input type="text" id="dni_solicitante">
+            D.N.I Nº <input type="text" id="dni_solicitante" onkeypress="soloNumeros(event)" oninput="formatearDNI(this)">
         </p>
 
         <p class="lineaPresentacion lineaGuiones">
@@ -99,6 +99,10 @@
             (4) Localidad asiento del Establecimiento.
         </div>
 
+        <button class="btnEliminar" onclick="eliminarCertificado(this)">
+        🗑 Eliminar certificado
+        </button>
+
         </div>
 
         <div id="contenedorPDF"></div>
@@ -106,6 +110,10 @@
         <div class="controles no-pdf">
 
             <input type="file" id="excelFile" accept=".xlsx,.xls">
+
+            <a href="Planillas/Listado_Alumnos.xlsx" download class="btn btnMaterial">
+                📥 Descargar plantilla Excel
+            </a>
 
             <button class="btn" onclick="procesarExcel()">Generar certificados</button>
 
@@ -118,7 +126,7 @@
                 <option value="M">Masculino</option>
                 <option value="F">Femenino</option>
                 </select>
-            </div>
+        </div>
 
         <div id="mensajeEstado" class="no-pdf"></div>
 

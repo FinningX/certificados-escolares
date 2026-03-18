@@ -7,30 +7,32 @@ window.print();
 
 /*codigo para leer el Excel*/ 
 function procesarExcel(){
-        contadorExcel = 0;
-        contadorManual = 0;
 
-        const fileInput = document.getElementById("excelFile");
-        const file = fileInput.files[0];
+    contadorExcel = 0;
+    contadorManual = 0;
 
-        if(!file){
-            mostrarMensaje("⚠ Debe seleccionar un archivo Excel antes de generar los certificados.", "error");
-            return;
-        }
+    const fileInput = document.getElementById("excelFile");
+    const file = fileInput.files[0];
 
-        const reader = new FileReader();
+    if(!file){
+        mostrarMensaje("⚠ Debe seleccionar un archivo Excel antes de generar los certificados.", "error");
+        return;
+    }
 
-        reader.onload = function(e){
+    const reader = new FileReader();
+
+    reader.onload = function(e){
 
         const data = new Uint8Array(e.target.result);
-
         const workbook = XLSX.read(data,{type:'array'});
-
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-        let alumnos = XLSX.utils.sheet_to_json(sheet);
+        // ✅ IMPORTANTE: mantiene columnas aunque estén vacías
+        let alumnos = XLSX.utils.sheet_to_json(sheet, {
+            defval: ""
+        });
 
-// eliminar filas vacías
+        // eliminar filas vacías
         alumnos = alumnos.filter(a => a.nombre && a.nombre.toString().trim() !== "");
 
         if(alumnos.length === 0){
@@ -38,7 +40,6 @@ function procesarExcel(){
             return;
         }
 
-        /*para los alertas*/
         const columnasRequeridas = [
             "apellido",
             "nombre",
@@ -53,40 +54,119 @@ function procesarExcel(){
             "localidad",
             "genero"
         ];
+
+        // nombres más amigables para docentes
+        const nombresBonitos = {
+            apellido: "Apellido",
+            nombre: "Nombre",
+            dni: "DNI",
+            nacimiento: "Fecha de nacimiento",
+            edad: "Edad",
+            grado: "Grado",
+            solicitante: "Solicitante",
+            nombre_solicitante: "Nombre del solicitante",
+            dni_solicitante: "DNI del solicitante",
+            ante: "Repartición",
+            localidad: "Localidad",
+            genero: "Género"
+        };
+
         const columnasExcel = Object.keys(alumnos[0] || {});
 
+        // ✅ VALIDAR COLUMNAS FALTANTES
         const columnasFaltantes = columnasRequeridas.filter(col => !columnasExcel.includes(col));
 
         if(columnasFaltantes.length > 0){
 
-            alert("El archivo Excel tiene columnas faltantes:\n\n" + columnasFaltantes.join("\n"));
+            const mensajeColumnas = columnasFaltantes
+                .map(col => nombresBonitos[col])
+                .join("\n");
 
+            alert("⚠ El archivo Excel tiene columnas faltantes:\n\n" + mensajeColumnas);
             return;
-
         }
-        /*--------------------------------__*/
+
+        // ✅ VALIDAR DATOS FALTANTES
+        const erroresAgrupados = {};
+
+        alumnos.forEach(alumno => {
+
+            const nombreCompleto = `${alumno.apellido || ""} ${alumno.nombre || ""}`.trim() || "(Sin nombre)";
+
+            columnasRequeridas.forEach(col => {
+
+                const valor = alumno[col];
+
+                if(valor === undefined || valor === null || valor.toString().trim() === ""){
+
+                    if(!erroresAgrupados[nombreCompleto]){
+                        erroresAgrupados[nombreCompleto] = [];
+                    }
+
+                    erroresAgrupados[nombreCompleto].push(nombresBonitos[col]);
+                }
+
+            });
+
+        });
+
+        if(Object.keys(erroresAgrupados).length > 0){
+
+            let mensaje = "⚠ El archivo tiene datos faltantes:\n\n";
+
+            for(let alumno in erroresAgrupados){
+                mensaje += `• ${alumno}: ${erroresAgrupados[alumno].join(", ")}\n`;
+            }
+
+            alert(mensaje);
+            return;
+        }
+
+        // ✅ TODO OK → generar certificados
         generarCertificados(alumnos);
 
     };
 
     reader.readAsArrayBuffer(file);
-    
+}
+
+/*Funcion que genera el pdf*/
+function generarPDF(nombreAlumno){
+
+    limpiarCertificadosVacios(); // <-- limpia páginas vacías
+
+        const elemento = document.querySelector(".plantilla");
+
+        const opciones = {
+
+            margin:0,
+
+            filename:`Certificado_${nombreAlumno}.pdf`,
+
+            image:{type:'jpeg',quality:1},
+
+            html2canvas:{scale:3},
+
+            jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+
+    };
+
+    return html2pdf().set(opciones).from(elemento).save();
+
 }
 
 function generarPDFMultiple(){
 
-        const elemento = document.getElementById("contenedorPDF");
+    limpiarCertificadosVacios(); // <-- limpia páginas vacías
 
-        const opciones = {
+    const elemento = document.getElementById("contenedorPDF");
+
+    const opciones = {
 
         margin:0,
-
         filename:"certificados_alumnos.pdf",
-
         image:{type:'jpeg',quality:1},
-
         html2canvas:{scale:3},
-
         jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
 
     };
@@ -118,16 +198,17 @@ async function generarCertificados(alumnos){
 
     contenedor.innerHTML = "";
 
-    const modelo = document.querySelector(".certificado");
+    const modelo = document.querySelector(".plantilla");
 
     let i = 0;
 
     for(let alumno of alumnos){
 
         i++;
-        mostrarMensaje(`Generando certificados... 0/${alumnos.length}`);
+        mostrarMensaje(`Generando certificados... ${i}/${alumnos.length}`);
 
         const copia = modelo.cloneNode(true);
+        copia.classList.remove("plantilla");
         aplicarGenero(copia, alumno.genero);
         /*----------------------*/
         const nombreCompletoAlumno = 
@@ -186,7 +267,11 @@ async function generarCertificados(alumnos){
         /*--------------------------------------------------------------------------------------------------------*/
 
         copia.querySelector("#localidad").value = alumno.localidad?.trim();
-        copia.style.pageBreakAfter = "auto";
+        if(i < alumnos.length){
+            copia.style.pageBreakAfter = "always";
+        }else{
+            copia.style.pageBreakAfter = "auto";
+        }
 
         contenedor.appendChild(copia);
         await new Promise(r => setTimeout(r,10)); 
@@ -229,28 +314,7 @@ function dividirTextoEnLineas(texto, campo1, campo2){
 
 }
 
-/*Funcion que genera el pdf*/
-function generarPDF(nombreAlumno){
 
-        const elemento = document.querySelector(".certificado");
-
-        const opciones = {
-
-        margin:0,
-
-        filename:`Certificado_${nombreAlumno}.pdf`,
-
-        image:{type:'jpeg',quality:1},
-
-        html2canvas:{scale:3},
-
-        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
-
-    };
-
-    return html2pdf().set(opciones).from(elemento).save();
-
-}
 
 /*Funcion para detectar el genero y tachar Dn o Dña*/
 function aplicarGenero(certificado, genero){
@@ -272,6 +336,25 @@ function aplicarGenero(certificado, genero){
     if(genero === "M"){
         dna.style.textDecoration = "line-through";
     } 
+
+}
+
+
+function limpiarCertificadosVacios(){
+
+    const contenedor = document.getElementById("contenedorPDF");
+
+    const certificados = contenedor.querySelectorAll(".certificado");
+
+    certificados.forEach(cert => {
+
+        const nombre = cert.querySelector(".campoAlumno")?.innerText.trim();
+
+        if(!nombre){
+            cert.remove();
+        }
+
+    });
 
 }
 
@@ -304,13 +387,13 @@ if(!ante2){
 
 /* bloquear edicion */
 
-copia.querySelectorAll("[contenteditable]").forEach(el=>{
+/*copia.querySelectorAll("[contenteditable]").forEach(el=>{
     el.contentEditable = "false";
 });
 
 copia.querySelectorAll("input").forEach(el=>{
     el.readOnly = true;
-});
+});*/
 
 contenedor.appendChild(copia);
 
@@ -349,4 +432,111 @@ function mostrarMensaje(texto, tipo="ok"){
         mensaje.style.display="none";
     },5000);
 
+}
+
+function eliminarCertificado(boton){
+
+    const certificado = boton.closest(".certificado");
+
+    if(confirm("¿Eliminar este certificado?")){
+        certificado.remove();
+    }
+
+}
+
+
+
+function formatearDNI(input){
+
+    let valor = input.value.replace(/\D/g,"");
+
+    if(valor){
+        input.value = Number(valor).toLocaleString("es-AR");
+    }else{
+        input.value = "";
+    }
+
+}
+
+function soloNumeros(event){
+    if(!/[0-9]/.test(event.key)){
+        event.preventDefault();
+    }
+}
+
+function formatearFechaInput(input){
+
+    let valor = input.value.replace(/\D/g,"");
+
+    if(valor.length > 8){
+        valor = valor.substring(0,8);
+    }
+
+    let resultado = "";
+
+    if(valor.length >= 1){
+        resultado = valor.substring(0,2);
+    }
+
+    if(valor.length >= 3){
+        resultado += "/" + valor.substring(2,4);
+    }
+
+    if(valor.length >= 5){
+        resultado += "/" + valor.substring(4);
+    }
+
+    input.value = resultado;
+
+}
+
+function validarFechaFinal(input){
+
+    let valor = input.value.trim();
+
+    if(!valor) return;
+
+    let partes = valor.split("/");
+
+    if(partes.length !== 3) return;
+
+    let dia = parseInt(partes[0],10);
+    let mes = parseInt(partes[1],10);
+    let anio = partes[2];
+
+    // completar ceros
+    let diaStr = String(dia).padStart(2,"0");
+    let mesStr = String(mes).padStart(2,"0");
+
+    // corregir año corto
+    if(anio.length === 2){
+        if(parseInt(anio) > 30){
+            anio = "19" + anio;
+        }else{
+            anio = "20" + anio;
+        }
+    }
+
+    anio = parseInt(anio,10);
+
+    // validaciones reales
+    if(mes < 1 || mes > 12){
+        mostrarMensaje("⚠ Mes inválido", "error");
+        input.focus();
+        return;
+    }
+
+    const diasPorMes = [31, (esBisiesto(anio)?29:28), 31,30,31,30,31,31,30,31,30,31];
+
+    if(dia < 1 || dia > diasPorMes[mes-1]){
+        mostrarMensaje("⚠ Día inválido", "error");
+        input.focus();
+        return;
+    }
+
+    input.value = `${diaStr}/${mesStr}/${anio}`;
+}
+
+function esBisiesto(anio){
+    return (anio % 4 === 0 && anio % 100 !== 0) || (anio % 400 === 0);
 }
