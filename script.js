@@ -1,11 +1,12 @@
 let contadorExcel = 0;
 let contadorManual = 0;
 
+//funcion para descargar el PDF generado
 function descargarPDF(){
-window.print();
+    window.print();
 }
 
-/*codigo para leer el Excel*/ 
+/*funcion para leer el Excel*/ 
 function procesarExcel(){
 
     contadorExcel = 0;
@@ -55,7 +56,7 @@ function procesarExcel(){
             "genero"
         ];
 
-        // nombres más amigables para docentes
+        // nombres más amigables para docentes en el mensaje de error
         const nombresBonitos = {
             apellido: "Apellido",
             nombre: "Nombre",
@@ -155,6 +156,7 @@ function generarPDF(nombreAlumno){
 
 }
 
+//funcion para generar un PDF con varios certificados (todos los que estén en el contenedor)
 function generarPDFMultiple(){
 
     limpiarCertificadosVacios(); // <-- limpia páginas vacías
@@ -175,6 +177,7 @@ function generarPDFMultiple(){
 
 }
 
+//funcion para convertir la fecha de Excel al formato 00/00/0000, teniendo en cuenta que Excel maneja las fechas como números de serie
 function convertirFechaExcel(fecha){
 
     if(typeof fecha === "number"){
@@ -201,7 +204,7 @@ async function generarCertificados(alumnos){
     const modelo = document.querySelector(".plantilla");
 
     let i = 0;
-
+    try {
     for(let alumno of alumnos){
 
         i++;
@@ -225,7 +228,8 @@ async function generarCertificados(alumnos){
 
         copia.querySelector("#edad").value = alumno.edad;
         
-        copia.querySelector("#grado").value = alumno.grado;
+        //formatea el grado y agrega el simbolo de grado
+        copia.querySelector("#grado").value =  formatearGrado(alumno.grado);
 
         copia.querySelector("#solicitante").value = alumno.solicitante;
 
@@ -275,7 +279,10 @@ async function generarCertificados(alumnos){
 
         contenedor.appendChild(copia);
         await new Promise(r => setTimeout(r,10)); 
-    }
+    } } catch(error){
+    console.error("Error generando certificado:", error);
+    alert("Error generando certificado. Revisar consola.");
+}
     contadorExcel += alumnos.length;
 
     mostrarMensaje(
@@ -285,6 +292,24 @@ async function generarCertificados(alumnos){
     /*generarPDFMultiple();*/
 }
 
+//funcion para formatear el grado y agregar el simbolo de grado
+function formatearGrado(valor){
+
+    if(valor === undefined || valor === null) return "";
+
+    let texto = String(valor).trim();
+
+    if(texto === "") return "";
+
+    // eliminar todo lo que no sea número
+    let numero = texto.replace(/\D/g, "");
+
+    if(numero === "") return "";
+
+    return numero + "°";
+}
+
+//funcion para dividir el texto largo en dos lineas dentro del certificado
 function dividirTextoEnLineas(texto, campo1, campo2){
 
     const palabras = texto.split(" ");
@@ -339,7 +364,7 @@ function aplicarGenero(certificado, genero){
 
 }
 
-
+//funcion para eliminar certificados vacios antes de exportar y descargar el PDF
 function limpiarCertificadosVacios(){
 
     const contenedor = document.getElementById("contenedorPDF");
@@ -434,6 +459,8 @@ function mostrarMensaje(texto, tipo="ok"){
 
 }
 
+
+//funcion para eliminar un certificado manualmente agregado
 function eliminarCertificado(boton){
 
     const certificado = boton.closest(".certificado");
@@ -444,8 +471,7 @@ function eliminarCertificado(boton){
 
 }
 
-
-
+//funcion para formatear el dni con separador de miles mientras se escribe
 function formatearDNI(input){
 
     let valor = input.value.replace(/\D/g,"");
@@ -458,12 +484,14 @@ function formatearDNI(input){
 
 }
 
+//funcion para permitir solo numeros en el campo del dni
 function soloNumeros(event){
     if(!/[0-9]/.test(event.key)){
         event.preventDefault();
     }
 }
 
+//funcion para formatear la fecha a medida que se escribe, agregando las barras y limitando a 8 numeros
 function formatearFechaInput(input){
 
     let valor = input.value.replace(/\D/g,"");
@@ -490,6 +518,7 @@ function formatearFechaInput(input){
 
 }
 
+//funcion para validar la fecha ingresada, corrigiendo el formato y verificando que sea una fecha real
 function validarFechaFinal(input){
 
     let valor = input.value.trim();
@@ -537,6 +566,7 @@ function validarFechaFinal(input){
     input.value = `${diaStr}/${mesStr}/${anio}`;
 }
 
+//funcion para determinar si un año es bisiesto (febrero tiene 29 días)
 function esBisiesto(anio){
     return (anio % 4 === 0 && anio % 100 !== 0) || (anio % 400 === 0);
 }
