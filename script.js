@@ -220,7 +220,8 @@ async function generarCertificados(alumnos){
         copia.querySelector(".campoAlumno").innerText = nombreCompletoAlumno;
         /*----------------------*/
         
-        /*aplica separador de miles al dni*/
+        /*aplica separador de miles al dni y elimina comas y espacios*/
+        alumno.dni = alumno.dni.toString().replace(/\D/g, "");
         copia.querySelector("#dni").value = Number(alumno.dni).toLocaleString("es-AR");
 
         /*Convierte la fecha a formato 00/00/0000*/
@@ -233,7 +234,9 @@ async function generarCertificados(alumnos){
 
         copia.querySelector("#solicitante").value = alumno.solicitante;
 
+        //formatea el nombre del solicitante eliminando caracteres no permitidos y espacios al inicio y final
         copia.querySelector("#nombre_solicitante").value = alumno.nombre_solicitante;
+        formatearNombreSolicitante(copia.querySelector("#nombre_solicitante"));
 
         /*aplica separador de miles al dni*/
         copia.querySelector("#dni_solicitante").value = Number(alumno.dni_solicitante).toLocaleString("es-AR");
@@ -354,11 +357,12 @@ function aplicarGenero(certificado, genero){
 
     genero = genero.toString().trim().toUpperCase();
 
-    if(genero === "F"){
+    // si el género es femenino, tachar "Dn" y dejar "Dña" detectando tanto "F" como "Femenino" ya sea en mayúscula o minúscula. Si el género es masculino, tachar "Dña" y dejar "Dn" detectando tanto "M" como "Masculino" 
+    if(genero === "F" || genero === "FEMENINO"){
         dn.style.textDecoration = "line-through";
     }
 
-    if(genero === "M"){
+    if(genero === "M" || genero === "MASCULINO"){
         dna.style.textDecoration = "line-through";
     } 
 
@@ -570,3 +574,9 @@ function validarFechaFinal(input){
 function esBisiesto(anio){
     return (anio % 4 === 0 && anio % 100 !== 0) || (anio % 400 === 0);
 }
+
+//FUNCION PARA ELIMINAR COMAS Y CARACTERES EN EL CAMPO nombre_solicitante
+function formatearNombreSolicitante(input){
+    let valor = input.value.replace(/[^a-zA-Z\s]/g,"").trim();
+    input.value = valor;
+} 
