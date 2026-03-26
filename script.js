@@ -238,7 +238,8 @@ async function generarCertificados(alumnos){
         copia.querySelector("#nombre_solicitante").value = alumno.nombre_solicitante;
         formatearNombreSolicitante(copia.querySelector("#nombre_solicitante"));
 
-        /*aplica separador de miles al dni*/
+        /*aplica separador de miles al dni y elimina comas y espacios*/
+        alumno.dni_solicitante = alumno.dni_solicitante.toString().replace(/\D/g, "");
         copia.querySelector("#dni_solicitante").value = Number(alumno.dni_solicitante).toLocaleString("es-AR");
 
         /*--------------------------------------------------------------------------------------------------------*/
