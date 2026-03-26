@@ -1,3 +1,6 @@
+                                                /*Sistema desarrollado para uso exclusivo de la institución Nuestra Señora de Fátima.
+                                                            Queda prohibida su copia o distribución sin autorización.*/
+
 let contadorExcel = 0;
 let contadorManual = 0;
 
@@ -28,7 +31,7 @@ function procesarExcel(){
         const workbook = XLSX.read(data,{type:'array'});
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-        // ✅ IMPORTANTE: mantiene columnas aunque estén vacías
+        // ✅ IMPORTANTE: mantiene las columnas aunque estén vacías
         let alumnos = XLSX.utils.sheet_to_json(sheet, {
             defval: ""
         });
@@ -56,7 +59,7 @@ function procesarExcel(){
             "genero"
         ];
 
-        // nombres más amigables para docentes en el mensaje de error
+        // nombres más amigables en el mensaje de error
         const nombresBonitos = {
             apellido: "Apellido",
             nombre: "Nombre",
@@ -74,7 +77,7 @@ function procesarExcel(){
 
         const columnasExcel = Object.keys(alumnos[0] || {});
 
-        // ✅ VALIDAR COLUMNAS FALTANTES
+        // VALIDAR COLUMNAS FALTANTES
         const columnasFaltantes = columnasRequeridas.filter(col => !columnasExcel.includes(col));
 
         if(columnasFaltantes.length > 0){
@@ -83,11 +86,11 @@ function procesarExcel(){
                 .map(col => nombresBonitos[col])
                 .join("\n");
 
-            alert("⚠ El archivo Excel tiene columnas faltantes:\n\n" + mensajeColumnas);
+            mostrarMensaje("⚠ El archivo Excel tiene columnas faltantes:\n\n" + mensajeColumnas, "error");
             return;
         }
 
-        // ✅ VALIDAR DATOS FALTANTES
+        // VALIDAR DATOS FALTANTES
         const erroresAgrupados = {};
 
         alumnos.forEach(alumno => {
@@ -119,11 +122,11 @@ function procesarExcel(){
                 mensaje += `• ${alumno}: ${erroresAgrupados[alumno].join(", ")}\n`;
             }
 
-            alert(mensaje);
+            mostrarMensaje(mensaje);
             return;
         }
 
-        // ✅ TODO OK → generar certificados
+        //SI TODO ESTA OK → generar los certificados
         generarCertificados(alumnos);
 
     };
@@ -285,7 +288,7 @@ async function generarCertificados(alumnos){
         await new Promise(r => setTimeout(r,10)); 
     } } catch(error){
     console.error("Error generando certificado:", error);
-    alert("Error generando certificado. Revisar consola.");
+    mostrarMensaje("Error generando certificado. Revisar consola.");
 }
     contadorExcel += alumnos.length;
 
