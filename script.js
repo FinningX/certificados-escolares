@@ -149,7 +149,11 @@ function generarPDF(nombreAlumno){
 
             image:{type:'jpeg',quality:1},
 
-            html2canvas:{scale:3},
+            html2canvas:{
+                scale:3,
+                useCORS:true,
+                letterRendering:true
+            },
 
             jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
 
@@ -171,7 +175,11 @@ function generarPDFMultiple(){
         margin:0,
         filename:"certificados_alumnos.pdf",
         image:{type:'jpeg',quality:1},
-        html2canvas:{scale:3},
+        html2canvas:{
+                scale:3,
+                useCORS:true,
+                letterRendering:true
+            },
         jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
 
     };
@@ -185,15 +193,17 @@ function convertirFechaExcel(fecha){
 
     if(typeof fecha === "number"){
 
-        const fechaJS = new Date((fecha - 25569) * 86400 * 1000);
+        const utc_days  = Math.floor(fecha - 25569);
+        const utc_value = utc_days * 86400;                                        
+        const fechaJS = new Date(utc_value * 1000);
 
-        const dia = String(fechaJS.getDate()).padStart(2,'0');
-        const mes = String(fechaJS.getMonth() + 1).padStart(2,'0');
-        const anio = fechaJS.getFullYear();
+        const dia = String(fechaJS.getUTCDate()).padStart(2,'0');
+        const mes = String(fechaJS.getUTCMonth() + 1).padStart(2,'0');
+        const anio = fechaJS.getUTCFullYear();
 
         return `${dia}/${mes}/${anio}`;
     }
-    
+
     return fecha;
 }
 
@@ -238,8 +248,9 @@ async function generarCertificados(alumnos){
         copia.querySelector("#solicitante").value = alumno.solicitante;
 
         //formatea el nombre del solicitante eliminando caracteres no permitidos y espacios al inicio y final
-        copia.querySelector("#nombre_solicitante").value = alumno.nombre_solicitante;
-        formatearNombreSolicitante(copia.querySelector("#nombre_solicitante"));
+        copia.querySelector("#nombre_solicitante").value =
+        formatearNombreSolicitante(alumno.nombre_solicitante)
+            .toLocaleUpperCase("es-AR");
 
         /*aplica separador de miles al dni y elimina comas y espacios*/
         alumno.dni_solicitante = alumno.dni_solicitante.toString().replace(/\D/g, "");
@@ -580,7 +591,17 @@ function esBisiesto(anio){
 }
 
 //FUNCION PARA ELIMINAR COMAS Y CARACTERES EN EL CAMPO nombre_solicitante
-function formatearNombreSolicitante(input){
-    let valor = input.value.replace(/[^a-zA-Z\s]/g,"").trim();
-    input.value = valor;
-} 
+function formatearNombreSolicitante(texto){
+
+    return texto
+        .replace(/[^\p{L}\s]/gu, "") // 🔥 permite letras con acento
+        .replace(/\s+/g, " ")        // evita espacios duplicados
+        .trim();
+
+}
+
+function normalizarMayusculas(texto){
+    return texto
+        .toLocaleUpperCase("es-AR")
+        .normalize("NFC");
+}

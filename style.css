@@ -105,7 +105,7 @@ box-sizing:border-box;
     text-align: center;
     width:400px;
     -webkit-text-stroke: black 0.5px;
-    text-transform:uppercase;
+    
 }
 #solicitante{
     text-align: center;
@@ -476,6 +476,8 @@ vertical-align:middle;
 #mensajeEstado{
 animation: aparecerMensaje 0.3s ease;
 }
+
+
 
 @keyframes aparecerMensaje{
 from{
