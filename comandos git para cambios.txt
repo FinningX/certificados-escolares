@@ -1,3 +1,3 @@
 git add .
-git commit -m "cambiada funcion de procesar fecha"
+git commit -m "mejorado los input y campoAlumno para corregir el muestreo del texto en ambos"
 git push
